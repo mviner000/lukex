@@ -8,6 +8,9 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import Image from "next/image"
+import { document } from "postcss"
+import Link from "next/link"
 
 
 const DocumentCard = ({ document }: { document: Doc<"documents"> }) => {
@@ -19,10 +22,15 @@ const DocumentCard = ({ document }: { document: Doc<"documents"> }) => {
                     <CardDescription>Card Description</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p>Card Content</p>
+                    {document.fileId}
+                    {/* <Image src={document.fileId} alt="try" height={50} width={50} /> */}
                 </CardContent>
                 <CardFooter>
-                    <Button variant="secondary">View</Button>
+                    <Button asChild variant="secondary">
+                        <Link href={`/documents/${document._id}`}>
+                            View
+                        </Link>
+                    </Button>
                 </CardFooter>
             </Card></div>
     )
