@@ -1,11 +1,6 @@
-"use client";
-
-import { SignInButton, UserButton } from "@clerk/clerk-react";
-import { Authenticated, Unauthenticated, useMutation, useQuery } from "convex/react";
-
-import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
 import Image from "next/image";
+import { HeaderActions } from "./header-actions";
 
 export function Header() {
     return (
@@ -19,14 +14,9 @@ export function Header() {
                     alt="lukex" />
                 Etiquette Luxe
             </div>
-            <div className="flex gap-4">
-                <Unauthenticated>
-                    <SignInButton />
-                </Unauthenticated>
-                <Authenticated>
-                    <ModeToggle />
-                    <UserButton />
-                </Authenticated>
+            <div className="flex gap-4 items-center">
+                <ModeToggle />
+                <HeaderActions />
             </div>
         </header>
     )
