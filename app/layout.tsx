@@ -4,8 +4,8 @@ import { Inter as FontSans } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import "./globals.css";
-import { ModeToggle } from "@/components/mode-toggle";
 import { Providers } from "./providers";
+import { Header } from "./header";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -23,24 +23,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
         )}
       >
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <ModeToggle />
-        <Providers>
-        {children}
-        </Providers>
-          </ThemeProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Providers>
+            <Header />
+            {children}
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );
