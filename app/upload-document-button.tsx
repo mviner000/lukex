@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -8,19 +8,19 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import UploadDocumentForm from './upload-document-form';
-import { useState } from 'react';
-import { Upload } from 'lucide-react';
+} from "@/components/ui/dialog";
+import UploadDocumentForm from "./upload-document-form";
+import { useState } from "react";
+import { Upload } from "lucide-react";
 
-const UploadDocumentButton = () => {
+export default function UploadDocumentButton() {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
         <Dialog onOpenChange={setIsOpen} open={isOpen}>
             <DialogTrigger asChild>
-                <Button className='flex items-center gap-1'>
-                    <Upload className='size-4' /> Upload Document
+                <Button className="flex items-center gap-2">
+                    <Upload className="w-4 h-4" /> Upload Document
                 </Button>
             </DialogTrigger>
             <DialogContent>
@@ -28,13 +28,11 @@ const UploadDocumentButton = () => {
                     <DialogTitle>Upload a Document</DialogTitle>
                     <DialogDescription>
                         Upload a team document for you to search over in the future.
-                        <UploadDocumentForm onUpload={() => setIsOpen(false)} />
                     </DialogDescription>
+
+                    <UploadDocumentForm onUpload={() => setIsOpen(false)} />
                 </DialogHeader>
             </DialogContent>
         </Dialog>
-
-    )
+    );
 }
-
-export default UploadDocumentButton

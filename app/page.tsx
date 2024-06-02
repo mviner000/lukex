@@ -2,7 +2,7 @@
 
 import { api } from "@/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
-import DocumentCard from "./document-card";
+import { DocumentCard } from "./document-card";
 import { Button } from "@/components/ui/button";
 import CreateDocumentButton from "./upload-document-button";
 
@@ -18,7 +18,9 @@ export default function Home() {
         <CreateDocumentButton />
       </div>
       <div className="grid grid-cols-4 gap-4">
-        {documents?.map((doc) => <DocumentCard document={doc} />)}
+        {documents?.map((doc) => (
+          <DocumentCard key={doc._id} document={doc} />
+        ))}
       </div>
     </main>
   );

@@ -1,4 +1,4 @@
-import { Doc } from "@/convex/_generated/dataModel"
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -6,34 +6,28 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
-import { document } from "postcss"
-import Link from "next/link"
+} from "@/components/ui/card";
+import { Doc } from "@/convex/_generated/dataModel";
+import { Eye } from "lucide-react";
+import Link from "next/link";
 
-
-const DocumentCard = ({ document }: { document: Doc<"documents"> }) => {
+export function DocumentCard({ document }: { document: Doc<"documents"> }) {
     return (
-        <div>
-            <Card>
-                <CardHeader>
-                    <CardTitle>{document.title}</CardTitle>
-                    <CardDescription>Card Description</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    {document.fileId}
-                    {/* <Image src={document.fileId} alt="try" height={50} width={50} /> */}
-                </CardContent>
-                <CardFooter>
-                    <Button asChild variant="secondary">
-                        <Link href={`/documents/${document._id}`}>
-                            View
-                        </Link>
-                    </Button>
-                </CardFooter>
-            </Card></div>
-    )
+        <Card>
+            <CardHeader>
+                <CardTitle>{document.title}</CardTitle>
+                <CardDescription></CardDescription>
+            </CardHeader>
+            <CardContent>
+                <p>Card Content</p>
+            </CardContent>
+            <CardFooter>
+                <Button asChild variant="secondary" className="flex items-center gap-2">
+                    <Link href={`/documents/${document._id}`}>
+                        <Eye className="w-4 h-4" /> View
+                    </Link>
+                </Button>
+            </CardFooter>
+        </Card>
+    );
 }
-
-export default DocumentCard
