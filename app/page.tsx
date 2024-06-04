@@ -9,17 +9,21 @@ import RightSidebar from "@/components/RightSidebar";
 import { useEffect, useRef, useState } from "react";
 import { handleCanvasMouseDown, handleCanvasMouseUp, handleCanvasObjectModified, handleCanvaseMouseMove, handleResize, initializeFabric, renderCanvas } from "@/lib/canvas";
 import { ActiveElement } from "@/types/type";
-import { useMutation, useStorage } from "@/liveblocks.config";
+import { useMutation, useRedo, useStorage, useUndo } from "@/liveblocks.config";
 import { defaultNavElement } from "@/constants";
-import { handleDelete } from "@/lib/key-events";
+import { handleDelete, handleKeyDown } from "@/lib/key-events";
+import { handleImageUpload } from "@/lib/shapes";
 
 export default function Home() {
+  const undo = useUndo();
+  const redo = useRedo();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricRef = useRef<fabric.Canvas | null>(null);
   const isDrawing = useRef(false);
   const shapeRef = useRef<fabric.Object | null>(null);
-  const selectedShapeRef = useRef<string | null>('rectangle');
+  const selectedShapeRef = useRef<string | null>(null);
   const activeObjectRef = useRef<fabric.Object | null>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const canvasObjects = useStorage((root) => root.canvasObjects)
 
@@ -42,17 +46,19 @@ export default function Home() {
   })
 
   const deleteAllShapes = useMutation(({ storage }) => {
-    const canvasObjects = storage.get('canvasObjects')
-    if (!canvasObjects || canvasObjects.size === 0)
-      return true;
+    const canvasObjects = storage.get('canvasObjects');
 
-    for (const [key, value] of canvasObjects.entries()) {
-      canvasObjects.delete(key)
+    if (!canvasObjects || canvasObjects.size === 0) {
+      return true;
     }
 
+    // Convert the Map entries to an array and iterate over it
+    Array.from(canvasObjects.entries()).forEach(([key, value]) => {
+      canvasObjects.delete(key);
+    });
+
     return canvasObjects.size === 0;
-  }
-    , [])
+  }, []);
 
   const deleteShapeFromStorage = useMutation(({ storage }, objectId) => {
     const canvasObjects = storage.get('canvasObjects');
@@ -75,6 +81,15 @@ export default function Home() {
       case 'delete':
         handleDelete(fabricRef.current as any, deleteShapeFromStorage)
         setActiveElement(defaultNavElement)
+        break;
+
+      case 'image':
+        imageInputRef.current?.click();
+        isDrawing.current = false;
+        if (fabricRef.current) {
+          fabricRef.current.isDrawingMode = false
+        }
+        break;
 
       default:
         break;
@@ -126,7 +141,18 @@ export default function Home() {
     })
 
     window.addEventListener("resize", () => {
-      handleResize({ fabricRef })
+      handleResize({ canvas: fabricRef.current })
+    })
+
+    window.addEventListener("keydown", (e) => {
+      handleKeyDown({
+        e,
+        canvas: fabricRef.current,
+        undo,
+        redo,
+        syncShapeInStorage,
+        deleteShapeFromStorage,
+      })
     })
 
     return () => {
@@ -146,7 +172,19 @@ export default function Home() {
   return (
     <main className="h-screen overflow-hidden">
       <Navbar
+        imageInputRef={imageInputRef}
         activeElement={activeElement}
+        handleImageUpload={(e: any) => {
+          // prevent the default behavior of the input element
+          e.stopPropagation();
+
+          handleImageUpload({
+            file: e.target.files[0],
+            canvas: fabricRef as any,
+            shapeRef,
+            syncShapeInStorage,
+          });
+        }}
         handleActiveElement={handleActiveElement}
       />
 

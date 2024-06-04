@@ -1,6 +1,10 @@
-import React from 'react'
+import { ReactNode } from "react"
 
-export const NewThread = ({ children }) => {
+interface NewThreadProps {
+    children: ReactNode;
+}
+
+export const NewThread = ({ children }: NewThreadProps) => {
     return (
         children
     )
