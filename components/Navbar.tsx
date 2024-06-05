@@ -56,7 +56,7 @@ const Navbar = ({ activeElement, imageInputRef, handleImageUpload, handleActiveE
                                     </Button>
                                 </NewThread>
                             ) : (
-                                <Button variant="outline" className="text-black dark:bg-transparent relative w-5 h-5 object-contain">
+                                <Button className="text-black dark:bg-transparent relative w-5 h-5 object-contain">
                                     <Image
                                         src={item.icon}
                                         alt={item.name}
